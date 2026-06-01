@@ -20,7 +20,7 @@ if (typeof chrome !== 'undefined' && chrome.storage) {
 
 // Define the routes available in the SPA
 const routes = {
-  'manual-scan': {
+  'manualscan': {
     template: '../pages/manualscan/manualscan.html',
     init: (navigate) => {
       initManualScan(navigate);
