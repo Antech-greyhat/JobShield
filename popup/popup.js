@@ -1,6 +1,22 @@
 import { initNavigation } from '../scripts/navigation.js';
 import { analyzeJobText } from '../scripts/scanner.js';
 
+// Global dark mode apply
+const applyTheme = (isDark) => {
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+};
+
+if (typeof chrome !== 'undefined' && chrome.storage) {
+  chrome.storage.local.get(['settings'], (result) => {
+    const settings = result.settings || { darkMode: false };
+    applyTheme(settings.darkMode);
+  });
+}
+
 // Define the routes available in the SPA
 const routes = {
   analysis: {
@@ -188,7 +204,54 @@ const routes = {
   settings: {
     template: '../pages/settings/index.html',
     init: () => {
-      console.log('Settings page loaded');
+      const autoScanToggle = document.getElementById('autoscan-toggle');
+      const darkModeToggle = document.getElementById('dark-mode-toggle');
+      const notificationsToggle = document.getElementById('notifications-toggle');
+      const clearHistoryBtn = document.getElementById('clear-history-btn');
+      const clearHistoryMsg = document.getElementById('clear-history-msg');
+
+      if (typeof chrome !== 'undefined' && chrome.storage) {
+        chrome.storage.local.get(['settings'], (result) => {
+          const settings = result.settings || { 
+            autoScan: true, 
+            darkMode: false,
+            notifications: true
+          };
+          
+          if (autoScanToggle) autoScanToggle.checked = settings.autoScan !== false;
+          if (darkModeToggle) darkModeToggle.checked = settings.darkMode === true;
+          if (notificationsToggle) notificationsToggle.checked = settings.notifications !== false;
+        });
+      }
+
+      const saveSettings = () => {
+        if (typeof chrome !== 'undefined' && chrome.storage) {
+          const newSettings = {
+            autoScan: autoScanToggle ? autoScanToggle.checked : true,
+            darkMode: darkModeToggle ? darkModeToggle.checked : false,
+            notifications: notificationsToggle ? notificationsToggle.checked : true
+          };
+          chrome.storage.local.set({ settings: newSettings });
+          applyTheme(newSettings.darkMode);
+        }
+      };
+
+      if (autoScanToggle) autoScanToggle.addEventListener('change', saveSettings);
+      if (darkModeToggle) darkModeToggle.addEventListener('change', saveSettings);
+      if (notificationsToggle) notificationsToggle.addEventListener('change', saveSettings);
+
+      if (clearHistoryBtn) {
+        clearHistoryBtn.addEventListener('click', () => {
+          if (typeof chrome !== 'undefined' && chrome.storage) {
+            chrome.storage.local.remove(['scanHistory'], () => {
+              clearHistoryMsg.classList.remove('hidden');
+              setTimeout(() => {
+                clearHistoryMsg.classList.add('hidden');
+              }, 3000);
+            });
+          }
+        });
+      }
     }
   },
   privacy: {

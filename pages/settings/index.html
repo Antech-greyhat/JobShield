@@ -1,4 +1,4 @@
-<div class="p-4">
+<div class="p-4 pb-20">
   <h1 class="text-xl font-bold text-primary mb-6">Settings</h1>
 
   <div class="space-y-6">
@@ -8,7 +8,7 @@
         <p class="text-xs text-text-muted">Automatically analyze jobs on supported sites</p>
       </div>
       <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" checked class="sr-only peer">
+        <input type="checkbox" id="autoscan-toggle" checked class="sr-only peer">
         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
       </label>
     </div>
@@ -19,9 +19,25 @@
         <p class="text-xs text-text-muted">Toggle application theme</p>
       </div>
       <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" class="sr-only peer" id="dark-mode-toggle">
+        <input type="checkbox" id="dark-mode-toggle" class="sr-only peer">
         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
       </label>
+    </div>
+
+    <div class="flex items-center justify-between">
+      <div>
+        <h3 class="font-semibold text-sm">Notifications</h3>
+        <p class="text-xs text-text-muted">Alerts for high-risk jobs</p>
+      </div>
+      <label class="relative inline-flex items-center cursor-pointer">
+        <input type="checkbox" id="notifications-toggle" checked class="sr-only peer">
+        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
+      </label>
+    </div>
+    
+    <div class="pt-2">
+      <button id="clear-history-btn" class="w-full text-center py-2 px-4 border border-danger text-danger hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-sm font-semibold transition-colors">Clear Scan History</button>
+      <p id="clear-history-msg" class="text-xs text-success text-center mt-2 hidden">History cleared successfully!</p>
     </div>
   </div>
 
