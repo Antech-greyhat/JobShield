@@ -1,5 +1,6 @@
 import { initNavigation } from '../scripts/navigation.js';
 import { analyzeJobText } from '../scripts/scanner.js';
+import { initManualScan } from '../pages/manualscan/manualscan.js';
 
 // Global dark mode apply
 const applyTheme = (isDark) => {
@@ -19,6 +20,12 @@ if (typeof chrome !== 'undefined' && chrome.storage) {
 
 // Define the routes available in the SPA
 const routes = {
+  'manual-scan': {
+    template: '../pages/manualscan/manualscan.html',
+    init: (navigate) => {
+      initManualScan(navigate);
+    }
+  },
   analysis: {
     template: '../pages/analysis/index.html',
     init: () => {

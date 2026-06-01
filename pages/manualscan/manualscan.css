@@ -1,0 +1,38 @@
+/* Custom styles for manual scan module */
+.animate-fade-in {
+  animation: ms-fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes ms-fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.manual-scan-container {
+  min-height: 100%;
+}
+
+/* Custom scrollbar for textareas inside the manual scan form */
+.manual-scan-container textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.manual-scan-container textarea::-webkit-scrollbar-track {
+  background: var(--surface);
+  border-radius: 4px;
+}
+
+.manual-scan-container textarea::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.manual-scan-container textarea::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
