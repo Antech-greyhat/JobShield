@@ -5,7 +5,8 @@
   "description": "Protect job seekers from recruitment fraud through trust scoring, scam detection, education, and reporting tools.",
   "action": {
     "default_popup": "popup/popup.html",
-    "default_title": "JobShield"
+    "default_title": "JobShield",
+    "default_icon": "assets/icons/icon.png"
   },
   "permissions": [
     "storage",
