@@ -6,6 +6,25 @@ export const analyzeJobText = (text, scamKeywords, verifiedCompanies) => {
   const flags = [];
   const textLower = text.toLowerCase();
 
+  // 0. Preliminary check: Is this actually a job posting?
+  const jobKeywords = ['job description', 'responsibilities', 'qualifications', 'requirements', 'apply now', 'hiring', 'salary', 'experience', 'employment type'];
+  let indicatorCount = 0;
+  for (const keyword of jobKeywords) {
+    if (textLower.includes(keyword)) indicatorCount++;
+  }
+
+  if (indicatorCount < 2) {
+    return {
+      score: 0,
+      flags: [{
+        type: 'info',
+        message: 'Not a Job Posting',
+        description: 'This page does not contain enough standard job keywords (e.g., responsibilities, requirements) to be analyzed.'
+      }],
+      status: 'unknown'
+    };
+  }
+
   // 1. Check for scam keywords
   for (const keyword of scamKeywords) {
     if (textLower.includes(keyword.term.toLowerCase())) {

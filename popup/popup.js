@@ -1,14 +1,17 @@
 import { initNavigation } from '../scripts/navigation.js';
+import { analyzeJobText } from '../scripts/scanner.js';
 
 // Define the routes available in the SPA
 const routes = {
   analysis: {
     template: '../pages/analysis/index.html',
     init: () => {
+      let currentTab = null;
       // Securely capture current website
       if (typeof chrome !== 'undefined' && chrome.tabs) {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
           if (tabs && tabs.length > 0 && tabs[0].url) {
+            currentTab = tabs[0];
             try {
               const url = new URL(tabs[0].url);
               const websiteEl = document.getElementById('current-website');
@@ -24,6 +27,92 @@ const routes = {
         });
       }
 
+      const performScan = async () => {
+        if (!currentTab || currentTab.url.startsWith('chrome://')) {
+           document.getElementById('score-message').textContent = "Cannot scan this page.";
+           document.getElementById('flags-container').innerHTML = '<p class="text-xs text-text-muted text-center py-4">No flags detected.</p>';
+           return;
+        }
+
+        try {
+          const response = await fetch('../data/scamkeywords.json');
+          const data = await response.json();
+          const scamKeywords = data.keywords || [];
+
+          chrome.scripting.executeScript({
+            target: { tabId: currentTab.id },
+            func: () => document.body.innerText
+          }, (results) => {
+            if (results && results[0] && results[0].result) {
+              const pageText = results[0].result;
+              const analysis = analyzeJobText(pageText, scamKeywords, []);
+              
+              const scoreText = document.getElementById('score-text');
+              const scoreBar = document.getElementById('score-bar');
+              const scoreMsg = document.getElementById('score-message');
+              const badge = document.getElementById('status-badge');
+              const flagsContainer = document.getElementById('flags-container');
+
+              scoreText.textContent = `${analysis.score}/100`;
+              scoreBar.style.width = `${analysis.score}%`;
+              
+              scoreText.className = 'text-2xl font-bold';
+              scoreBar.className = 'h-2.5 rounded-full transition-all duration-500';
+              badge.className = 'px-2 py-1 rounded text-xs font-semibold';
+
+              if (analysis.status === 'safe') {
+                scoreText.classList.add('text-success');
+                scoreBar.classList.add('bg-success');
+                scoreMsg.textContent = "This job post appears to be legitimate based on our checks.";
+                badge.classList.add('bg-green-100', 'text-green-700');
+                badge.textContent = 'Safe';
+              } else if (analysis.status === 'unknown') {
+                scoreText.textContent = '--/100';
+                scoreText.classList.add('text-gray-500');
+                scoreBar.classList.add('bg-gray-500');
+                scoreMsg.textContent = "This page doesn't look like a job posting.";
+                badge.classList.add('bg-gray-200', 'text-gray-800');
+                badge.textContent = 'N/A';
+              } else if (analysis.status === 'warning') {
+                scoreText.classList.add('text-warning');
+                scoreBar.classList.add('bg-warning');
+                scoreMsg.textContent = "Proceed with caution. Some suspicious flags detected.";
+                badge.classList.add('bg-yellow-100', 'text-yellow-700');
+                badge.textContent = 'Caution';
+              } else {
+                scoreText.classList.add('text-danger');
+                scoreBar.classList.add('bg-danger');
+                scoreMsg.textContent = "High risk! Multiple scam indicators detected.";
+                badge.classList.add('bg-red-100', 'text-red-700');
+                badge.textContent = 'High Risk';
+              }
+
+              if (analysis.flags.length === 0) {
+                 flagsContainer.innerHTML = '<p class="text-xs text-text-muted text-center py-4">No suspicious flags detected.</p>';
+              } else {
+                 flagsContainer.innerHTML = analysis.flags.map(flag => {
+                   let borderClass = flag.type === 'danger' ? 'border-danger bg-red-50' : 'border-warning bg-yellow-50';
+                   let textClass = flag.type === 'danger' ? 'text-red-800' : 'text-yellow-800';
+                   let descClass = flag.type === 'danger' ? 'text-red-700' : 'text-yellow-700';
+
+                   return `<div class="p-3 border-l-4 ${borderClass} rounded-r-lg">
+                      <h4 class="text-sm font-semibold ${textClass}">${flag.message}</h4>
+                      <p class="text-xs ${descClass} mt-1">${flag.description}</p>
+                    </div>`;
+                 }).join('');
+              }
+            } else {
+               document.getElementById('score-message').textContent = "Failed to extract page text.";
+            }
+          });
+        } catch (e) {
+          console.error("Scan error", e);
+          document.getElementById('score-message').textContent = "Error running scan.";
+        }
+      };
+
+      setTimeout(performScan, 300);
+
       const btn = document.getElementById('rescan-btn');
       if (btn) {
         btn.addEventListener('click', () => {
@@ -36,13 +125,14 @@ const routes = {
           btn.disabled = true;
           btn.classList.add('opacity-75', 'cursor-not-allowed');
 
-          // Simulate scanning delay
-          setTimeout(() => {
-            textSpan.textContent = originalText;
-            spinner.classList.add('hidden');
-            btn.disabled = false;
-            btn.classList.remove('opacity-75', 'cursor-not-allowed');
-          }, 1500);
+          performScan().then(() => {
+            setTimeout(() => {
+              textSpan.textContent = originalText;
+              spinner.classList.add('hidden');
+              btn.disabled = false;
+              btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }, 500);
+          });
         });
       }
     }
