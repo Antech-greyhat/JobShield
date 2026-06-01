@@ -5,8 +5,27 @@ const routes = {
   analysis: {
     template: '../pages/analysis/index.html',
     init: () => {
-      // Logic when analysis page loads
-      console.log('Analysis page loaded');
+      const btn = document.getElementById('rescan-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const textSpan = btn.querySelector('.btn-text');
+          const spinner = btn.querySelector('.spinner');
+          const originalText = textSpan.textContent;
+          
+          textSpan.textContent = 'Scanning...';
+          spinner.classList.remove('hidden');
+          btn.disabled = true;
+          btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+          // Simulate scanning delay
+          setTimeout(() => {
+            textSpan.textContent = originalText;
+            spinner.classList.add('hidden');
+            btn.disabled = false;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+          }, 1500);
+        });
+      }
     }
   },
   learn: {
@@ -18,7 +37,31 @@ const routes = {
   report: {
     template: '../pages/report/index.html',
     init: () => {
-      console.log('Report page loaded');
+      const btn = document.getElementById('submit-report-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          const textSpan = btn.querySelector('.btn-text');
+          const spinner = btn.querySelector('.spinner');
+          const originalText = textSpan.textContent;
+          
+          textSpan.textContent = 'Submitting...';
+          spinner.classList.remove('hidden');
+          btn.disabled = true;
+          btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+          // Simulate submitting delay
+          setTimeout(() => {
+            textSpan.textContent = 'Submitted!';
+            spinner.classList.add('hidden');
+            
+            setTimeout(() => {
+              textSpan.textContent = originalText;
+              btn.disabled = false;
+              btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            }, 2000);
+          }, 1500);
+        });
+      }
     }
   },
   settings: {
