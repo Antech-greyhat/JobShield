@@ -1,9 +1,111 @@
-<div class="p-6 flex flex-col h-full items-center justify-center text-center">
-  <div class="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center mb-6">
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-primary"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+<div class="flex flex-col items-center justify-center bg-background text-text px-5 py-6 text-center min-h-full">
+
+  <!-- Animated Logo from Assets -->
+  <div class="mb-5 relative flex items-center justify-center">
+    <div class="w-24 h-24 rounded-full shadow-2xl overflow-hidden" style="animation: ob-pulse 2.8s ease-in-out infinite;">
+      <img src="../assets/icons/icon.png" alt="JobShield Logo" class="w-full h-full object-cover">
+    </div>
+    <div class="absolute w-24 h-24 rounded-full border-4 border-primary opacity-40" style="animation: ob-ping 1.4s ease-out forwards;"></div>
   </div>
-  <h1 class="text-2xl font-bold text-text mb-2">Welcome to JobShield</h1>
-  <p class="text-sm text-text-muted mb-8">Your trusted companion for safe job hunting in Kenya. We'll help you spot scams and protect your data.</p>
-  
-  <button class="btn btn-primary w-full shadow-lg shadow-primary/40 text-lg py-3 rounded-xl" id="btn-get-started">Get Started</button>
+
+  <!-- Title -->
+  <h1 class="text-3xl font-extrabold text-primary tracking-tight mb-1">JobShield</h1>
+  <p class="text-sm text-text-muted mb-7 font-medium">Stay safe while job hunting.</p>
+
+  <!-- Feature Cards -->
+  <div class="w-full space-y-2.5 mb-8 text-left">
+
+    <!-- Fake Recruiters: user-x icon, blue -->
+    <div class="flex items-center gap-3 bg-surface rounded-xl px-3 py-2.5 border border-border shadow-sm" style="opacity:0;animation:ob-slide 0.4s ease 0.1s forwards">
+      <div class="w-9 h-9 rounded-lg bg-blue-100 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+          <circle cx="8.5" cy="7" r="4"/>
+          <line x1="18" y1="8" x2="23" y2="13"/>
+          <line x1="23" y1="8" x2="18" y2="13"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold leading-tight">Fake Recruiters</p>
+        <p class="text-xs text-text-muted">Spot impersonators and ghost recruiters</p>
+      </div>
+    </div>
+
+    <!-- Job Scams: alert-triangle icon, yellow/warning -->
+    <div class="flex items-center gap-3 bg-surface rounded-xl px-3 py-2.5 border border-border shadow-sm" style="opacity:0;animation:ob-slide 0.4s ease 0.2s forwards">
+      <div class="w-9 h-9 rounded-lg bg-yellow-100 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+          <line x1="12" y1="9" x2="12" y2="13"/>
+          <line x1="12" y1="17" x2="12.01" y2="17"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold leading-tight">Job Scams</p>
+        <p class="text-xs text-text-muted">Detect common patterns in fraudulent postings</p>
+      </div>
+    </div>
+
+    <!-- Fee Requests: dollar-sign / ban icon, red -->
+    <div class="flex items-center gap-3 bg-surface rounded-xl px-3 py-2.5 border border-border shadow-sm" style="opacity:0;animation:ob-slide 0.4s ease 0.3s forwards">
+      <div class="w-9 h-9 rounded-lg bg-red-100 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+          <line x1="12" y1="8" x2="12" y2="12"/>
+          <path d="M9 10h6"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold leading-tight">Fee Requests</p>
+        <p class="text-xs text-text-muted">Alert when jobs ask you to pay to apply</p>
+      </div>
+    </div>
+
+    <!-- Suspicious Companies: building / search icon, purple -->
+    <div class="flex items-center gap-3 bg-surface rounded-xl px-3 py-2.5 border border-border shadow-sm" style="opacity:0;animation:ob-slide 0.4s ease 0.4s forwards">
+      <div class="w-9 h-9 rounded-lg bg-purple-100 flex items-center justify-center shrink-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+          <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          <line x1="12" y1="11" x2="12" y2="11"/>
+          <circle cx="17" cy="13" r="2"/>
+          <path d="m21 17-1.5-1.5"/>
+        </svg>
+      </div>
+      <div>
+        <p class="text-sm font-semibold leading-tight">Suspicious Companies</p>
+        <p class="text-xs text-text-muted">Flag unverified or newly created unverified companies</p>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- CTA Button -->
+  <button id="get-started-btn"
+    class="w-full py-3 px-6 rounded-xl bg-primary text-white font-bold text-base shadow-lg hover:brightness-110 active:scale-95 transition-all duration-150 flex items-center justify-center gap-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M5 12h14M12 5l7 7-7 7"/>
+    </svg>
+    Get Started
+  </button>
+
+  <p class="text-xs text-text-muted mt-3 opacity-60">No account required &middot; 100% private</p>
 </div>
+
+<style>
+  @keyframes ob-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  @keyframes ob-ping {
+    0% { transform: scale(1); opacity: 0.4; }
+    100% { transform: scale(1.7); opacity: 0; }
+  }
+  @keyframes ob-slide {
+    to { opacity: 1; transform: translateX(0); }
+    from { opacity: 0; transform: translateX(-14px); }
+  }
+</style>
+

@@ -265,10 +265,61 @@ const routes = {
     init: () => {
       console.log('Terms page loaded');
     }
+  },
+  onboarding: {
+    template: '../pages/onboarding/index.html',
+    init: () => {}
   }
 };
 
+const showOnboarding = (nav) => {
+  // Inject the onboarding HTML on top as an overlay
+  const container = document.getElementById('page-container');
+  fetch('../pages/onboarding/index.html')
+    .then(r => r.text())
+    .then(html => {
+      const overlay = document.createElement('div');
+      overlay.id = 'onboarding-overlay';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:var(--background);overflow-y:auto;';
+      overlay.innerHTML = html;
+      document.body.appendChild(overlay);
+
+      // Hide bottom nav while onboarding
+      const navEl = document.querySelector('nav');
+      if (navEl) navEl.style.display = 'none';
+
+      const btn = document.getElementById('get-started-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          // Mark onboarding as complete
+          if (typeof chrome !== 'undefined' && chrome.storage) {
+            chrome.storage.local.set({ onboardingComplete: true });
+          }
+          // Animate out and remove
+          overlay.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+          overlay.style.opacity = '0';
+          overlay.style.transform = 'scale(0.96)';
+          setTimeout(() => {
+            overlay.remove();
+            if (navEl) navEl.style.display = '';
+          }, 400);
+        });
+      }
+    });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
-  // Initialize navigation with 'analysis' as the default route
   const nav = initNavigation(routes, 'analysis');
+
+  // Check if first-time user
+  if (typeof chrome !== 'undefined' && chrome.storage) {
+    chrome.storage.local.get(['onboardingComplete'], (result) => {
+      if (!result.onboardingComplete) {
+        showOnboarding(nav);
+      }
+    });
+  } else {
+    // Fallback for non-extension context: always show
+    showOnboarding(nav);
+  }
 });
