@@ -1,7 +1,6 @@
 // SPA navigation controller for the popup
 export const initNavigation = (routes, defaultRoute = 'home') => {
   const container = document.getElementById('page-container');
-  const navItems = document.querySelectorAll('.nav-item');
 
   const navigate = async (routeId) => {
     const route = routes[routeId];
@@ -13,8 +12,8 @@ export const initNavigation = (routes, defaultRoute = 'home') => {
       const html = await response.text();
       container.innerHTML = html;
 
-      // Update active nav state
-      navItems.forEach(item => {
+      // Update active nav state for bottom navigation
+      document.querySelectorAll('.nav-item').forEach(item => {
         if (item.dataset.route === routeId) {
           item.classList.add('active');
         } else {
@@ -24,19 +23,20 @@ export const initNavigation = (routes, defaultRoute = 'home') => {
 
       // Execute route specific logic if provided
       if (typeof route.init === 'function') {
-        route.init();
+        route.init(navigate);
       }
     } catch (err) {
       console.error('Failed to load page:', err);
     }
   };
 
-  // Setup click listeners on nav items
-  navItems.forEach(item => {
-    item.addEventListener('click', (e) => {
+  // Event delegation for all route links (handles dynamically injected content)
+  document.body.addEventListener('click', (e) => {
+    const link = e.target.closest('[data-route]');
+    if (link) {
       e.preventDefault();
-      navigate(item.dataset.route);
-    });
+      navigate(link.dataset.route);
+    }
   });
 
   // Initial load

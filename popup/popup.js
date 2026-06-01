@@ -69,6 +69,18 @@ const routes = {
     init: () => {
       console.log('Settings page loaded');
     }
+  },
+  privacy: {
+    template: '../pages/privacy/index.html',
+    init: () => {
+      console.log('Privacy page loaded');
+    }
+  },
+  terms: {
+    template: '../pages/terms/index.html',
+    init: () => {
+      console.log('Terms page loaded');
+    }
   }
 };
 
