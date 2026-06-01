@@ -5,6 +5,25 @@ const routes = {
   analysis: {
     template: '../pages/analysis/index.html',
     init: () => {
+      // Securely capture current website
+      if (typeof chrome !== 'undefined' && chrome.tabs) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs && tabs.length > 0 && tabs[0].url) {
+            try {
+              const url = new URL(tabs[0].url);
+              const websiteEl = document.getElementById('current-website');
+              if (websiteEl) {
+                // Keep the SVG icon but update the text node
+                websiteEl.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                  ${url.hostname}`;
+              }
+            } catch (e) {
+              console.error("Invalid URL");
+            }
+          }
+        });
+      }
+
       const btn = document.getElementById('rescan-btn');
       if (btn) {
         btn.addEventListener('click', () => {
@@ -37,6 +56,18 @@ const routes = {
   report: {
     template: '../pages/report/index.html',
     init: () => {
+      // Securely pre-fill current URL
+      if (typeof chrome !== 'undefined' && chrome.tabs) {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (tabs && tabs.length > 0 && tabs[0].url) {
+            const urlInput = document.getElementById('report-url');
+            if (urlInput && !tabs[0].url.startsWith('chrome://')) {
+              urlInput.value = tabs[0].url;
+            }
+          }
+        });
+      }
+
       const btn = document.getElementById('submit-report-btn');
       if (btn) {
         btn.addEventListener('click', () => {
