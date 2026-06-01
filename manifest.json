@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "JobShield",
+  "version": "1.0.0",
+  "description": "Protect job seekers from recruitment fraud through trust scoring, scam detection, education, and reporting tools.",
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "JobShield"
+  },
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "*://*.linkedin.com/*",
+    "*://*.glassdoor.com/*",
+    "*://*.brightermonday.co.ke/*",
+    "*://*.fuzu.com/*"
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.linkedin.com/jobs/*",
+        "*://*.glassdoor.com/job-listing/*",
+        "*://*.brightermonday.co.ke/jobs/*",
+        "*://*.fuzu.com/jobs/*"
+      ],
+      "css": ["content/content.css", "styles/tailwind.css"],
+      "js": ["content/content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "assets/*"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

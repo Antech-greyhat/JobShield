@@ -1,0 +1,32 @@
+[
+  {
+    "term": "pay for training",
+    "weight": 50,
+    "description": "Legitimate employers do not charge for necessary training."
+  },
+  {
+    "term": "registration fee",
+    "weight": 40,
+    "description": "Charging an upfront fee is a common sign of a scam."
+  },
+  {
+    "term": "mpesa",
+    "weight": 30,
+    "description": "Asking for money transfers via mobile money before an interview is highly suspicious."
+  },
+  {
+    "term": "work from home",
+    "weight": 10,
+    "description": "While often legitimate, this phrase is frequently used in scams. Use caution."
+  },
+  {
+    "term": "no experience needed",
+    "weight": 10,
+    "description": "Often combined with high salary promises in scam listings."
+  },
+  {
+    "term": "immediate start",
+    "weight": 5,
+    "description": "Can be a pressure tactic used by scammers."
+  }
+]

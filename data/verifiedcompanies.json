@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Safaricom",
+    "domain": "safaricom.co.ke",
+    "verified": true
+  },
+  {
+    "name": "KCB Bank",
+    "domain": "kcbgroup.com",
+    "verified": true
+  },
+  {
+    "name": "Equity Bank",
+    "domain": "equitygroupholdings.com",
+    "verified": true
+  },
+  {
+    "name": "Kenya Airways",
+    "domain": "kenya-airways.com",
+    "verified": true
+  }
+]
