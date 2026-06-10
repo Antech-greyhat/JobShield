@@ -2,12 +2,15 @@ import { initNavigation } from '../scripts/navigation.js';
 import { analyzeJobText } from '../scripts/scanner.js';
 import { initManualScan } from '../pages/manualscan/manualscan.js';
 
-// Global dark mode apply
+// Global theme apply
 const applyTheme = (isDark) => {
+  document.documentElement.classList.toggle('light', !isDark);
+  document.documentElement.classList.toggle('dark', isDark);
+
   if (isDark) {
-    document.documentElement.classList.add('dark');
+    document.documentElement.setAttribute('data-theme', 'dark');
   } else {
-    document.documentElement.classList.remove('dark');
+    document.documentElement.setAttribute('data-theme', 'light');
   }
 };
 
@@ -212,6 +215,7 @@ const routes = {
     template: '../pages/settings/index.html',
     init: () => {
       const autoScanToggle = document.getElementById('autoscan-toggle');
+      const lightThemeToggle = document.getElementById('light-theme-toggle');
       const darkModeToggle = document.getElementById('dark-mode-toggle');
       const notificationsToggle = document.getElementById('notifications-toggle');
       const clearHistoryBtn = document.getElementById('clear-history-btn');
@@ -226,6 +230,7 @@ const routes = {
           };
           
           if (autoScanToggle) autoScanToggle.checked = settings.autoScan !== false;
+          if (lightThemeToggle) lightThemeToggle.checked = settings.darkMode !== true;
           if (darkModeToggle) darkModeToggle.checked = settings.darkMode === true;
           if (notificationsToggle) notificationsToggle.checked = settings.notifications !== false;
         });
@@ -244,6 +249,7 @@ const routes = {
       };
 
       if (autoScanToggle) autoScanToggle.addEventListener('change', saveSettings);
+      if (lightThemeToggle) lightThemeToggle.addEventListener('change', saveSettings);
       if (darkModeToggle) darkModeToggle.addEventListener('change', saveSettings);
       if (notificationsToggle) notificationsToggle.addEventListener('change', saveSettings);
 

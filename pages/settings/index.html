@@ -13,15 +13,21 @@
       </label>
     </div>
 
-    <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between gap-4">
       <div>
-        <h3 class="font-semibold text-sm">Dark Mode</h3>
-        <p class="text-xs text-text-muted">Toggle application theme</p>
+        <h3 class="font-semibold text-sm">Theme</h3>
+        <p class="text-xs text-text-muted">Choose light or dark theme</p>
       </div>
-      <label class="relative inline-flex items-center cursor-pointer">
-        <input type="checkbox" id="dark-mode-toggle" class="sr-only peer">
-        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-      </label>
+      <div class="inline-flex rounded-lg border border-border bg-surface p-1 text-xs font-semibold">
+        <label class="cursor-pointer">
+          <input type="radio" id="light-theme-toggle" name="theme" value="light" class="sr-only peer">
+          <span class="block rounded-md px-3 py-1.5 text-text-muted transition-colors peer-checked:bg-primary peer-checked:text-white">Light</span>
+        </label>
+        <label class="cursor-pointer">
+          <input type="radio" id="dark-mode-toggle" name="theme" value="dark" class="sr-only peer">
+          <span class="block rounded-md px-3 py-1.5 text-text-muted transition-colors peer-checked:bg-primary peer-checked:text-white">Dark</span>
+        </label>
+      </div>
     </div>
 
     <div class="flex items-center justify-between">
