@@ -172,6 +172,68 @@ const routes = {
   report: {
     template: '../pages/report/index.html',
     init: () => {
+      const form = document.getElementById('report-form');
+      const fields = [
+        document.getElementById('report-url'),
+        document.getElementById('report-company'),
+        document.getElementById('report-reason')
+      ].filter(Boolean);
+      const error = document.getElementById('report-error');
+
+      const clearValidationMessage = (field) => {
+        field.setCustomValidity('');
+        field.classList.remove('border-danger', 'focus:ring-danger');
+        field.classList.add('border-border', 'focus:ring-primary');
+      };
+
+      const markInvalid = (field, message) => {
+        field.setCustomValidity(message);
+        field.classList.remove('border-border', 'focus:ring-primary');
+        field.classList.add('border-danger', 'focus:ring-danger');
+      };
+
+      const validateReportForm = () => {
+        let isValid = true;
+
+        fields.forEach((field) => {
+          const value = field.value.trim();
+          clearValidationMessage(field);
+
+          if (!value) {
+            markInvalid(field, 'Please fill in this field.');
+            isValid = false;
+          } else if (field.type === 'url') {
+            try {
+              new URL(value);
+              field.value = value;
+            } catch (e) {
+              markInvalid(field, 'Please enter a valid job URL.');
+              isValid = false;
+            }
+          } else {
+            field.value = value;
+          }
+        });
+
+        if (error) {
+          error.classList.toggle('hidden', isValid);
+          error.textContent = isValid
+            ? ''
+            : 'Please fill in every field with valid information before submitting.';
+        }
+
+        return isValid && (!form || form.checkValidity());
+      };
+
+      fields.forEach((field) => {
+        field.addEventListener('input', () => {
+          clearValidationMessage(field);
+          if (error) {
+            error.classList.add('hidden');
+          }
+        });
+      });
+
       // Securely pre-fill current URL
       if (typeof chrome !== 'undefined' && chrome.tabs) {
         chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
@@ -185,8 +247,15 @@ const routes = {
       }
 
       const btn = document.getElementById('submit-report-btn');
-      if (btn) {
-        btn.addEventListener('click', () => {
+      if (form && btn) {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+
+          if (!validateReportForm()) {
+            form.reportValidity();
+            return;
+          }
+
           const textSpan = btn.querySelector('.btn-text');
           const spinner = btn.querySelector('.spinner');
           const originalText = textSpan.textContent;
