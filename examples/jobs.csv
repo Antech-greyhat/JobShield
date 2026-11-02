@@ -1,0 +1,3 @@
+text,title,company_name,company_website,application_fee,interview_method
+"Job description: Engineer. Responsibilities: Build services. Salary available.",Software Engineer,Example,https://example.com,false,video
+"Hiring now. Salary guaranteed. Registration fee required. Limited slots.",Urgent Assistant,Example,https://example.com,true,whatsapp
