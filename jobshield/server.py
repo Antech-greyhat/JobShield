@@ -152,6 +152,10 @@ class APIHandler(BaseHTTPRequestHandler):
 
     @staticmethod
     def _query(raw: str, allowed: set[str]) -> dict[str, str]:
+        # Python 3.10's strict parser rejects an empty string, but an absent
+        # query is valid and needs no parsing.
+        if not raw:
+            return {}
         try:
             data = parse_qs(raw, keep_blank_values=True, strict_parsing=True, max_num_fields=10)
         except ValueError as error:

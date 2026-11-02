@@ -48,9 +48,12 @@ class APITests(unittest.TestCase):
             connection.close()
 
     def test_health_is_public_and_does_not_create_database(self):
-        status, body, headers = self.request("GET", "/health", token=None)
-        self.assertEqual((status, body["status"]), (200, "ok"))
-        self.assertEqual(headers["Cache-Control"], "no-store")
+        for path in ("/health", "/health?"):
+            with self.subTest(path=path):
+                status, body, headers = self.request("GET", path, token=None)
+                self.assertEqual(status, 200, body)
+                self.assertEqual(body["status"], "ok")
+                self.assertEqual(headers["Cache-Control"], "no-store")
         self.assertFalse(self.path.exists())
 
     def test_data_endpoints_require_token(self):
@@ -131,7 +134,8 @@ class APITests(unittest.TestCase):
 
     def test_invalid_parameters_and_wrong_field_types_return_400(self):
         for path in ["/v1/scans?limit=no", "/v1/scans?limit=0", "/v1/scans?status=invalid",
-                     "/v1/scans?limit=1&limit=2", "/v1/scans?unexpected=yes", "/v1/stats?days=0"]:
+                     "/v1/scans?limit=1&limit=2", "/v1/scans?unexpected=yes", "/v1/stats?days=0",
+                     "/health?flag", "/v1/scans?limit", "/v1/scans?limit=1&"]:
             with self.subTest(path=path):
                 self.assertEqual(self.request("GET", path)[0], 400)
         for payload in [[], {}, {"posting": {"text": JOB}, "save": "false"}, {"posting": {"text": 5}}]:
